@@ -6,8 +6,8 @@ namespace PlaywrightDemoTwo.Driver
     public class PlaywrightDriver
     {
 
-        public IBrowser Browser;
-        public IBrowserContext BrowserContext;
+        public Task<IBrowser> Browser;
+        public Task<IBrowserContext> BrowserContext;
         private readonly TestSettings _testSettings;
         public Task<IPage> Page;
 
@@ -15,18 +15,24 @@ namespace PlaywrightDemoTwo.Driver
         {
             _testSettings = testSettings;
 
-            Page = Task.Run(InitializePlaywrightAsync);
+            Browser = Task.Run(InitializePlaywrightAsync);
+            BrowserContext = Task.Run(CreateBrowserContext);
+            Page = Task.Run(CreatePageAsync);
         }
 
-        private async Task<IPage> InitializePlaywrightAsync()
+        private async Task<IBrowser> InitializePlaywrightAsync()
         {
-            Browser = await GetBrowserAsync(_testSettings);
-            BrowserContext = await Browser.NewContextAsync();
-            var page = await BrowserContext.NewPageAsync();
+            return await GetBrowserAsync(_testSettings);
+        }
 
-            await page.GotoAsync("http://eaapp.somee.com");
+        private async Task<IBrowserContext> CreateBrowserContext()
+        {
+            return await (await Browser).NewContextAsync();
+        }
 
-            return page;
+        private async Task<IPage> CreatePageAsync()
+        {
+            return await (await BrowserContext).NewPageAsync();
         }
 
         private async Task<IBrowser> GetBrowserAsync(TestSettings testSettings)

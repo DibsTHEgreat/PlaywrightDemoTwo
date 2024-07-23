@@ -20,6 +20,7 @@ namespace PlaywrightDemoTwo
             };
 
             _driver = new PlaywrightDriver(testSettings);
+            await _driver.Page.Result.GotoAsync("http://eaapp.somee.com");
         }
 
         [Test]
@@ -60,8 +61,8 @@ namespace PlaywrightDemoTwo
         [TearDown]
         public async Task TearDown()
         {
-            await _driver.Browser.CloseAsync();
-            await _driver.Browser.DisposeAsync();
+            await _driver.Browser.Result.CloseAsync();
+            await _driver.Browser.Result.DisposeAsync();
         }
 
     }
