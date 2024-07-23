@@ -5,10 +5,21 @@ namespace PlaywrightDemoTwo.Config
     {
         public bool Headless { get; set; }
 
+        public DriverType DriverType { get; set; }
+
         public bool DevTools { get; set; }
 
         public string Channel { get; set; }
 
         public int SlowMo { get; set; }
+    }
+
+    public enum DriverType
+    {
+        Chromium,
+        Firefox,
+        Edge,
+        Chrome,
+        Webkit
     }
 }

@@ -19,7 +19,8 @@ namespace PlaywrightDemoTwo
                 Channel = "chrome",
                 DevTools =  true,
                 Headless = false,
-                SlowMo = 1500
+                SlowMo = 1500,
+                DriverType  = DriverType.Chromium
             };
 
             PlaywrightDriver driver = new PlaywrightDriver();

@@ -7,25 +7,37 @@ namespace PlaywrightDemoTwo.Driver
     {
         public async Task<IPage> InitalizePlaywright(TestSettings testSettings)
         {
-            // This will launch playwright
-            var playwrightDriver = await Playwright.CreateAsync();
-
-            var browserOptions = new BrowserTypeLaunchOptions();
-            browserOptions.Headless = testSettings.Headless;
-            browserOptions.Devtools = testSettings.DevTools;
-            browserOptions.SlowMo = testSettings.SlowMo;
-            browserOptions.Channel = testSettings.Channel;
-
-            // Invoking a Chromium driver
-            var chromium = await playwrightDriver.Chromium.LaunchAsync(browserOptions);
-
-            var browserContext = await chromium.NewContextAsync();
-
+            var browser = await GetBrowserAsync(testSettings);
+            var browserContext = await browser.NewContextAsync();
             var page = await browserContext.NewPageAsync();
 
             await page.GotoAsync("http://eaapp.somee.com");
 
             return page;
+        }
+
+        public async Task<IBrowser> GetBrowserAsync(TestSettings testSettings)
+        {
+
+            // This will launch playwright
+            var playwrightDriver = await Playwright.CreateAsync();
+
+            var browserOptions = new BrowserTypeLaunchOptions
+            {
+                Headless = testSettings.Headless,
+                Devtools = testSettings.DevTools,
+                SlowMo = testSettings.SlowMo,
+                Channel = testSettings.Channel
+            };
+
+            return testSettings.DriverType switch
+            {
+                DriverType.Chromium => await playwrightDriver.Chromium.LaunchAsync(browserOptions),
+                DriverType.Chrome => await playwrightDriver["chrome"].LaunchAsync(browserOptions),
+                DriverType.Edge => await playwrightDriver["msedge"].LaunchAsync(browserOptions),
+                DriverType.Firefox => await playwrightDriver.Firefox.LaunchAsync(browserOptions),
+                _ => await playwrightDriver.Webkit.LaunchAsync(browserOptions)
+            };
         }
     }
 }
