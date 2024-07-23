@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using PlaywrightDemoTwo.Config;
 using PlaywrightDemoTwo.Driver;
 
 namespace PlaywrightDemoTwo
@@ -13,8 +14,16 @@ namespace PlaywrightDemoTwo
         [Test]
         public async Task Test1()
         {
+            TestSettings testSettings = new TestSettings
+            {
+                Channel = "chrome",
+                DevTools =  true,
+                Headless = false,
+                SlowMo = 1500
+            };
+
             PlaywrightDriver driver = new PlaywrightDriver();
-            IPage page = await driver.InitalizePlaywright();
+            IPage page = await driver.InitalizePlaywright(testSettings);
 
             await page.ClickAsync("text=Login");
         }

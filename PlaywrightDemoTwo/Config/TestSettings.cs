@@ -1,7 +1,14 @@
 ﻿
 namespace PlaywrightDemoTwo.Config
 {
-    internal class TestSettings
+    public class TestSettings
     {
+        public bool Headless { get; set; }
+
+        public bool DevTools { get; set; }
+
+        public string Channel { get; set; }
+
+        public int SlowMo { get; set; }
     }
 }
