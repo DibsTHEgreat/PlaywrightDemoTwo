@@ -3,7 +3,7 @@ using PlaywrightDemoTwo.Config;
 
 namespace PlaywrightDemoTwo.Driver
 {
-    public class PlaywrightDriverInitializer
+    public class PlaywrightDriverInitializer : IPlaywrightDriverInitializer
     {
 
         public const float DEFAULT_TIMEOUT = 30f;
@@ -12,6 +12,13 @@ namespace PlaywrightDemoTwo.Driver
         {
             var options = GetParameters(testSettings.Args, testSettings.Timeout, testSettings.Headless, testSettings.SlowMo);
             options.Channel = "chrome";
+            return await GetBrowserAsync(DriverType.Chromium, options);
+        }
+
+        public async Task<IBrowser> GetEdgeDriverAsync(TestSettings testSettings)
+        {
+            var options = GetParameters(testSettings.Args, testSettings.Timeout, testSettings.Headless, testSettings.SlowMo);
+            options.Channel = "msedge";
             return await GetBrowserAsync(DriverType.Chromium, options);
         }
 

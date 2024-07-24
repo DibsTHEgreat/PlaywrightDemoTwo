@@ -6,6 +6,7 @@ namespace PlaywrightDemoTwo
     public class Tests
     {
         private PlaywrightDriver _driver;
+        private PlaywrightDriverInitializer _playwrightDriverinitializer;
 
         [SetUp]
         public async Task Setup()
@@ -14,11 +15,13 @@ namespace PlaywrightDemoTwo
             {
                 DevTools = true,
                 Headless = false,
-                SlowMo = 1500,
+                SlowMo = 500,
                 DriverType = DriverType.Chromium
             };
 
-            _driver = new PlaywrightDriver(testSettings);
+            _playwrightDriverinitializer = new PlaywrightDriverInitializer();
+
+            _driver = new PlaywrightDriver(testSettings, _playwrightDriverinitializer);
             await _driver.Page.GotoAsync("http://eaapp.somee.com");
         }
 
