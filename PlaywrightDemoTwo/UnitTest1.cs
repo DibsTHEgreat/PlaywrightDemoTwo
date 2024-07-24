@@ -12,7 +12,6 @@ namespace PlaywrightDemoTwo
         {
             TestSettings testSettings = new TestSettings
             {
-                Channel = "chrome",
                 DevTools = true,
                 Headless = false,
                 SlowMo = 1500,

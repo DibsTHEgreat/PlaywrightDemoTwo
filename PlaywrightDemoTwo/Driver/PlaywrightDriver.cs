@@ -50,7 +50,6 @@ namespace PlaywrightDemoTwo.Driver
                 Headless = testSettings.Headless,
                 Devtools = testSettings.DevTools,
                 SlowMo = testSettings.SlowMo,
-                Channel = testSettings.Channel
             };
 
             return testSettings.DriverType switch
