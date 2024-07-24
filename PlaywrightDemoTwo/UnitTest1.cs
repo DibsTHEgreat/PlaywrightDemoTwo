@@ -9,7 +9,7 @@ namespace PlaywrightDemoTwo
         private PlaywrightDriverInitializer _playwrightDriverinitializer;
 
         [SetUp]
-        public async Task Setup()
+        public void Setup()
         {
             TestSettings testSettings = new TestSettings
             {
@@ -22,28 +22,32 @@ namespace PlaywrightDemoTwo
             _playwrightDriverinitializer = new PlaywrightDriverInitializer();
 
             _driver = new PlaywrightDriver(testSettings, _playwrightDriverinitializer);
-            await _driver.Page.GotoAsync("http://eaapp.somee.com");
         }
 
         [Test]
         public async Task Test1()
         {
-            await _driver.Page.ClickAsync("text=Login");
+            var page = await _driver.Page;
+            await page.GotoAsync("http://eaapp.somee.com");
+            await page.ClickAsync("text=Login");
         }
 
         [Test]
         public async Task LoginTest()
         {
-            await _driver.Page.ClickAsync("text=Login");
-            await _driver.Page.GetByLabel("Username").FillAsync("admin");
-            await _driver.Page.GetByLabel("Password").FillAsync("password");
+            var page = await _driver.Page;
+            await page.GotoAsync("http://eaapp.somee.com");
+            await page.ClickAsync("text=Login");
+            await page.GetByLabel("Username").FillAsync("admin");
+            await page.GetByLabel("Password").FillAsync("password");
         }
 
         [TearDown]
         public async Task TearDown()
         {
-            await _driver.Browser.CloseAsync();
-            await _driver.Browser.DisposeAsync();
+            var browser = await _driver.Browser;
+            await browser.CloseAsync();
+            await browser.DisposeAsync();
         }
 
     }

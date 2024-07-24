@@ -6,24 +6,24 @@ namespace PlaywrightDemoTwo.Driver
     public class PlaywrightDriver
     {
 
-        private readonly Lazy<Task<IBrowser>> _browser;
-        private readonly Lazy<Task<IBrowserContext>> _browserContext;
+        private readonly AsyncTask<IBrowser> _browser;
+        private readonly AsyncTask<IBrowserContext> _browserContext;
         private readonly TestSettings _testSettings;
         private readonly IPlaywrightDriverInitializer _playwrightDriverInitializer;
-        private readonly Lazy<Task<IPage>> _page;
+        private readonly AsyncTask<IPage> _page;
 
         public PlaywrightDriver(TestSettings testSettings, IPlaywrightDriverInitializer playwrightDriverInitializer)
         {
             _testSettings = testSettings;
             _playwrightDriverInitializer = playwrightDriverInitializer;
-            _browser = new Lazy<Task<IBrowser>>(InitializePlaywrightAsync);
-            _browserContext = new Lazy<Task<IBrowserContext>>(CreateBrowserContext);
-            _page = new Lazy<Task<IPage>>(CreatePageAsync);
+            _browser = new AsyncTask<IBrowser>(InitializePlaywrightAsync);
+            _browserContext = new AsyncTask<IBrowserContext>(CreateBrowserContext);
+            _page = new AsyncTask<IPage>(CreatePageAsync);
         }
 
-        public IPage Page => _page.Value.Result;
-        public IBrowser Browser => _browser.Value.Result;
-        public IBrowserContext BrowserContext => _browserContext.Value.Result;
+        public Task<IPage> Page => _page.Value;
+        public Task<IBrowser> Browser => _browser.Value;
+        public Task<IBrowserContext> BrowserContext => _browserContext.Value;
 
         private async Task<IBrowser> InitializePlaywrightAsync()
         {
@@ -39,12 +39,12 @@ namespace PlaywrightDemoTwo.Driver
 
         private async Task<IBrowserContext> CreateBrowserContext()
         {
-            return await (await _browser.Value).NewContextAsync();
+            return await (await _browser).NewContextAsync();
         }
 
         private async Task<IPage> CreatePageAsync()
         {
-            return await (await _browserContext.Value).NewPageAsync();
+            return await (await _browserContext).NewPageAsync();
         }
     }
 }
